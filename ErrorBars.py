@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
  
-from OptionPricing import (
+from OptionPricingEngine import (
     MarketData, VanillaOption, BlackScholesPricer, MonteCarloPricer,
 )
 

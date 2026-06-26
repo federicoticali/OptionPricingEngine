@@ -24,9 +24,8 @@ Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\ma
 
 Monte Carlo pricer with:
 - three path schemes: exact (exact GBM step), euler, milstein;
-- four estimators: standard, antithetic variates, control variates (terminal stock
-price as control), importance sampling;
--a 95% confidence interval (±1.96·SE) reported on every estimate.
+- four estimators: standard, antithetic variates, control variates (terminal stock price as control), importance sampling;
+- a 95% confidence interval (±1.96·SE) reported on every estimate.
 
 
 Cox–Ross–Rubinstein binomial tree (vectorised over the terminal layer via the binomial pmf).

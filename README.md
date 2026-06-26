@@ -130,7 +130,7 @@ also be checked against the textbook's published numbers:
 | Θ (theta, per year) | ≈ −4.31              |
 | ρ (rho)             | ≈ 8.91               |
 
---- 
+
 
 | Quantity            | Value (Hull example) |                  
 |---------------------|----------------------|

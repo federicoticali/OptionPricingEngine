@@ -17,7 +17,7 @@ sharing those same inputs.
 
 ## Features
 
-- **Analytic Black–Scholes** price + full Greeks (Δ, Γ, Θ, ν, ρ) for calls and puts.
+- **Analytic Black–Scholes** price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, ν, $\rho$) for calls and puts.
 - **Monte Carlo** pricer with:
   - three path schemes: `exact` (exact GBM step), `euler`, `milstein`;
   - four estimators: **standard**, **antithetic variates**, **control variates** (terminal stock

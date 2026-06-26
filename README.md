@@ -1,4 +1,4 @@
-# European OptionPricingEngine
+# European Option Pricing Engine
 
 A small, self-contained Python engine that prices European vanilla options in three independent
 ways — Black–Scholes closed-form, Monte Carlo (several variance-reduction techniques and

@@ -59,15 +59,7 @@ the package — see the roadmap).
 git clone https://github.com/<you>/<repo>.git
 cd <repo>
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-`requirements.txt`:
-
-```
-numpy
-scipy
-matplotlib
+pip install -r numpy scipy matplotlib
 ```
 
 ---

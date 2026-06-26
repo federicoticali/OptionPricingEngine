@@ -1,0 +1,12 @@
+# Exact, reproducible pins. Regenerate from a known-good environment with:
+#     pip freeze > requirements.txt
+# (The loose lower bounds for library use live in pyproject.toml instead.)
+
+# runtime
+numpy==2.4.4
+scipy==1.17.1
+matplotlib==3.10.8
+
+# dev / CI
+pytest==9.1.1
+ruff==0.15.20

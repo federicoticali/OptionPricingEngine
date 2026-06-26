@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+ 
+[project]
+name = "option-pricing-engine"
+version = "0.1.0"
+description = "European vanilla option pricing: Black-Scholes, Monte Carlo, and Cox-Ross-Rubinstein tree."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Your Name", email = "you@example.com" }]
+keywords = ["options", "black-scholes", "monte-carlo", "binomial-tree", "quantitative-finance"]
+ 
+# Lower bounds for library compatibility. Exact, reproducible pins live in requirements.txt.
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+]
+ 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+ 
+[tool.setuptools.packages.find]
+where = ["src"]
+ 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+ 
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]

@@ -156,7 +156,6 @@ Good things to assert in a test suite:
 - [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
 - [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
       current usage, document or reset it if instances get reused.
-- [ ] Lint / format pass (`ruff`, `black`) and a docstring sweep.
 
 ---
 
@@ -172,5 +171,4 @@ Good things to assert in a test suite:
 
 ## License
 
-Released under the MIT License — see `LICENSE`. (Add a `LICENSE` file; MIT is a sensible default for
-a portfolio/quant project.)
+Released under the MIT License — see `LICENSE`.

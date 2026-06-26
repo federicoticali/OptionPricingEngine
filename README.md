@@ -72,9 +72,9 @@ from OptionPricing import (
     BlackScholesPricer, MonteCarloPricer, CoxRossRubensteinPricer,
 )
 
-# Hull's textbook example: S=49, K=50, r=5%, sigma=20%, T=20 weeks
-market = MarketData(S=49, r=0.05, sigma=0.20)
-option = VanillaOption(K=50, T=20 / 52, option_type="call")
+# Hull's textbook example: S = 49, K = 50, r = 5%, sigma = 20%, T = 20 weeks
+market = MarketData(S = 49, r = 0.05, sigma = 0.20)
+option = VanillaOption(K = 50, T = 20 / 52, option_type = "call")
 
 # 1) Analytic Black–Scholes + Greeks
 bs = BlackScholesPricer(market, option)
@@ -83,7 +83,7 @@ print(bs.price_n_greeks())          # price ~ 2.40
 # 2) Monte Carlo with control variates
 mc = MonteCarloPricer(market, option)
 mc.scheme, mc.n_paths = "exact", 500_000
-price, se = mc.PricingMC(variance_reduction="control")
+price, se = mc.PricingMC(variance_reduction = "control")
 print(f"{price:.4f} ± {1.96 * se:.4f}")
 
 # 3) Cox–Ross–Rubinstein binomial tree

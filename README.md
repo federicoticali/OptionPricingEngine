@@ -19,7 +19,7 @@ reference for testing (see Validation).
 # Features
 
 
-Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\mathcal{V}$, $\rho$) for calls and puts.
+Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\mathscr{V}$, $\rho$) for calls and puts.
 Monte Carlo pricer with:
 
 three path schemes: exact (exact GBM step), euler, milstein;

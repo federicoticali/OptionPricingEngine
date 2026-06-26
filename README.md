@@ -167,6 +167,7 @@ Good things to assert in a test suite:
 - [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
 - [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
       current usage, document or reset it if instances get reused.
+- [ ] A C++ version of this project is expected to be realized in future.
 
 ---
 

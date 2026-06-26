@@ -197,9 +197,8 @@ class MonteCarloPricer:
     def ImportanceSamplingMC(self):
         opt, mkt = self.option, self.market
         discount = np.exp(- mkt.r * (opt.T - opt.t_in))
-        if self.mu is None:
-            self.mu = - self.d2
-        theta = self.mu / np.sqrt(self.n_steps)
+        mu = - self.d2 if self.mu is None else self.mu
+        theta = mu / np.sqrt(self.n_steps)
         if self.scheme == 'exact':
             Z = np.random.standard_normal(self.n_paths)
             Y = Z + self.mu

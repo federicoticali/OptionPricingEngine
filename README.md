@@ -41,15 +41,27 @@ sharing those same inputs.
 
 ```
 .
-├── OptionPricing.py          # core engine: MarketData, VanillaOption, the three pricers
-├── ConvergencePlot.py        # Fig 1: MC + tree converging to BS; Fig 2: Greek FD-error U-curve
-├── CoxRossRubensteinTree.py  # CRR odd–even oscillation + O(1/n) convergence rate
-├── ErrorBars.py              # MC estimator comparison across schemes (price ± 95% CI)
-└── README.md
+├── pyproject.toml            # build config, dependencies, pytest/ruff settings
+├── requirements.txt          # exact pinned versions for reproducible installs
+├── README.md
+├── LICENSE
+├── src/
+│   └── option_pricing/
+│       ├── __init__.py       # public API re-exports
+│       └── pricing.py        # core engine: MarketData, VanillaOption, the three pricers
+├── scripts/                  # validation / convergence plots
+│   ├── ConvergencePlot.py        # Fig 1: MC + tree converging to BS; Fig 2: Greek FD-error U-curve
+│   ├── CoxRossRubensteinTree.py  # CRR odd–even oscillation + O(1/n) convergence rate
+│   └── ErrorBars.py              # MC estimator comparison across schemes (price ± 95% CI)
+├── tests/
+│   └── test_pricing.py       # Black–Scholes vs Hull, parity, Greeks, MC/CRR convergence
+└── .github/
+    └── workflows/
+        └── ci.yml            # ruff + pytest on Python 3.10–3.12
 ```
 
-The three plotting scripts all import from `OptionPricing.py`, so keep them next to it (or install
-the package — see the roadmap).
+The engine lives in `src/option_pricing/`. Scripts and tests import it as the installed
+`OptionPricing` package (see [Installation](#installation)), so they don't need to sit next to it.
 
 ---
 
@@ -59,15 +71,18 @@ the package — see the roadmap).
 git clone https://github.com/federicoticali/OptionPricingEngine.git
 cd OptionPricingEngine
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
-pip install -r numpy scipy matplotlib
+pip install -e ".[dev]"      # package (editable) + numpy/scipy/matplotlib + pytest/ruff
 ```
+
+`pip install -e .` (without `[dev]`) is enough just to use the library; add `[dev]` to also get the
+test and lint tools. Run the test suite with `pytest`.
 
 ---
 
 ## Quick start
 
 ```python
-from OptionPricing import (
+from option_pricing import (
     MarketData, VanillaOption,
     BlackScholesPricer, MonteCarloPricer, CoxRossRubensteinPricer,
 )
@@ -96,10 +111,12 @@ print(tree.CoxRossRubensteinTree())
 
 ## Reproducing the figures
 
+Run from the repo root (each script writes its PNG(s) to the current directory):
+
 ```bash
-python ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
-python CoxRossRubensteinTree.py    # -> crr_convergence.png
-python ErrorBars.py                # -> methods_comparison.png
+python scripts/ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
+python scripts/CoxRossRubensteinTree.py    # -> crr_convergence.png
+python scripts/ErrorBars.py                # -> methods_comparison.png
 ```
 
 - **`price_convergence.png`** — the three MC estimators (with ±1.96·SE bands) and the CRR tree all
@@ -153,20 +170,12 @@ Good things to assert in a test suite:
 
 ## TODO / Roadmap
 
-- [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
-      within CI, Greek finite-difference checks.
 - [ ] **Dividends.** Add a continuous dividend yield $q$ (Merton extension): use the drift $r − q$
       everywhere — BS becomes $Se^{−qT}N(d_1)−Ke^{−rT}N(d_2)%$, the MC terminal draw uses
       $\left(r − q − \frac{\sigma^2}{2}\right)$, and the CRR risk-neutral probability becomes $p = \frac{e^{(r−q)Δt} − d}{u − d}.
       Later step: discrete cash dividends (escrowed-spot or proportional approximation for the tree).
 - [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
-      a continuous dividend yield $q$.
-- [ ] Package the project (`pyproject.toml`, `src/` layout, `pip install -e .`) and make script /
-      figure names consistent (some docstrings mention `crr_convergence.py` / `methods_comparison.png`
-      that differ from the actual file names).
-- [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
-- [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
-      current usage, document or reset it if instances get reused.
+      a continuous dividend yield $q$
 - [ ] A C++ version of this project is expected to be realized in future.
 
 ---

@@ -11,7 +11,7 @@ import math
 import numpy as np
 import pytest
  
-from option_pricing import (
+from OptionPricing import (
     MarketData,
     VanillaOption,
     BlackScholesPricer,
@@ -212,3 +212,4 @@ def test_marketdata_rejects_bad_inputs(bad):
                                  dict(K=50, T=0.5, t_in=1.0)])
 def test_vanillaoption_rejects_bad_inputs(bad):
     with pytest.raises(ValueError):
+        VanillaOption(**bad)

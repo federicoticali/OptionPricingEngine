@@ -133,9 +133,9 @@ also be checked against the textbook's published numbers:
 Good things to assert in a test suite:
 
 - BS price/Greeks vs the table above (and vs a finite-difference Greek for a sanity bound);
-- **put–call parity**: `C − P = S − K·e^(−rT)` (internal consistency, no data needed);
+- **put–call parity**: $C − P = S − Ke^{−rT}$ (internal consistency, no data needed);
 - MC estimate within its own 95% CI of the BS price for each scheme/estimator;
-- CRR price within an `O(1/n)` tolerance of BS;
+- CRR price within an `$O(1/n)$` tolerance of BS;
 - cross-check against an independent library (e.g. **QuantLib**) on the same inputs.
 
 ---
@@ -145,11 +145,11 @@ Good things to assert in a test suite:
 - [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
       within CI, Greek finite-difference checks.
 - [ ] **Dividends.** Add a continuous dividend yield `q` (Merton extension): use the drift `(r − q)`
-      everywhere — BS becomes `S·e^(−qT)·N(d₁) − K·e^(−rT)·N(d₂)`, the MC terminal draw uses
-      `(r − q − σ²/2)`, and the CRR risk-neutral probability becomes `p = (e^((r−q)Δt) − d)/(u − d)`.
+      everywhere — BS becomes $Se^{−qT}N(d_1)−Ke^{−rT}N(d_2)%$, the MC terminal draw uses
+      $\left(r − q − \frac{\sigma^2}{2}\right)$, and the CRR risk-neutral probability becomes $p = \frac{e^{(r−q)Δt} − d}{u − d}.
       Later step: discrete cash dividends (escrowed-spot or proportional approximation for the tree).
 - [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
-      a continuous dividend yield `q`.
+      a continuous dividend yield $q$.
 - [ ] Package the project (`pyproject.toml`, `src/` layout, `pip install -e .`) and make script /
       figure names consistent (some docstrings mention `crr_convergence.py` / `methods_comparison.png`
       that differ from the actual file names).

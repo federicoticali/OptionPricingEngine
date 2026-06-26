@@ -56,7 +56,7 @@ the package — see the roadmap).
 ## Installation
 
 ```bash
-git clone https://github.com/<you>/<repo>.git
+git clone https://github.com/federicoticali/OptionPricingEngine.git
 cd <repo>
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r numpy scipy matplotlib

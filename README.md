@@ -121,14 +121,25 @@ Black–Scholes price is the ground truth**, and both Monte Carlo and the CRR tr
 (this is exactly what the plots show). The default parameters are Hull's example, so the engine can
 also be checked against the textbook's published numbers:
 
-| Quantity            | Value (Hull example) |
+| Quantity            | Value (Hull example) |                  
 |---------------------|----------------------|
 | Call price          | ≈ 2.40               |
 | Δ (delta)           | ≈ 0.522              |
-| Γ (gamma)           | ≈ 0.066              |
+| Γ (gamma)           | ≈ 0.066              |    
 | ν (vega, per 100%)  | ≈ 12.1               |
 | Θ (theta, per year) | ≈ −4.31              |
 | ρ (rho)             | ≈ 8.91               |
+
+--- 
+
+| Quantity            | Value (Hull example) |                  
+|---------------------|----------------------|
+| Put price           | ≈ 2.44               |
+| Δ (delta)           | ≈ -0.478             |
+| Γ (gamma)           | ≈ 0.066              |
+| ν (vega, per 100%)  | ≈ 12.1               |
+| Θ (theta, per year) | ≈ −1.85              |
+| ρ (rho)             | ≈ -9.96              |
 
 Good things to assert in a test suite:
 

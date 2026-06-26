@@ -28,7 +28,9 @@ BS = BlackScholesPricer(Market, Option).price()
  
 C = {"Standard": "#9aa0a6", "Antithetic": "#1f77b4", "Control": "#2ca02c",
      "CRR tree": "#d62728", "BS": "#111111"}
- 
+
+SEED = 12345
+np.random.default_rng(SEED) 
 
 def mc_estimate(n_paths, variance_reduction):
     """One Monte Carlo estimate (price, std_error) at the given budget (exact scheme)."""

@@ -18,7 +18,7 @@ Requires: numpy, matplotlib, and the classes in OptionPricing.py.
 import numpy as np
 import matplotlib.pyplot as plt
  
-from OptionPricingEngine import (
+from OptionPricing import (
     MarketData, VanillaOption, BlackScholesPricer, CoxRossRubensteinPricer,
 )
  

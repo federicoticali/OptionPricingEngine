@@ -153,20 +153,12 @@ Good things to assert in a test suite:
 
 ## TODO / Roadmap
 
-- [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
-      within CI, Greek finite-difference checks.
 - [ ] **Dividends.** Add a continuous dividend yield $q$ (Merton extension): use the drift $r − q$
       everywhere — BS becomes $Se^{−qT}N(d_1)−Ke^{−rT}N(d_2)%$, the MC terminal draw uses
       $\left(r − q − \frac{\sigma^2}{2}\right)$, and the CRR risk-neutral probability becomes $p = \frac{e^{(r−q)Δt} − d}{u − d}.
       Later step: discrete cash dividends (escrowed-spot or proportional approximation for the tree).
 - [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
-      a continuous dividend yield $q$.
-- [ ] Package the project (`pyproject.toml`, `src/` layout, `pip install -e .`) and make script /
-      figure names consistent (some docstrings mention `crr_convergence.py` / `methods_comparison.png`
-      that differ from the actual file names).
-- [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
-- [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
-      current usage, document or reset it if instances get reused.
+      a continuous dividend yield $q$
 - [ ] A C++ version of this project is expected to be realized in future.
 
 ---

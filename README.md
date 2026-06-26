@@ -41,15 +41,27 @@ sharing those same inputs.
 
 ```
 .
-├── OptionPricing.py          # core engine: MarketData, VanillaOption, the three pricers
-├── ConvergencePlot.py        # Fig 1: MC + tree converging to BS; Fig 2: Greek FD-error U-curve
-├── CoxRossRubensteinTree.py  # CRR odd–even oscillation + O(1/n) convergence rate
-├── ErrorBars.py              # MC estimator comparison across schemes (price ± 95% CI)
-└── README.md
+├── pyproject.toml            # build config, dependencies, pytest/ruff settings
+├── requirements.txt          # exact pinned versions for reproducible installs
+├── README.md
+├── LICENSE
+├── src/
+│   └── option_pricing/
+│       ├── __init__.py       # public API re-exports
+│       └── pricing.py        # core engine: MarketData, VanillaOption, the three pricers
+├── scripts/                  # validation / convergence plots
+│   ├── ConvergencePlot.py        # Fig 1: MC + tree converging to BS; Fig 2: Greek FD-error U-curve
+│   ├── CoxRossRubensteinTree.py  # CRR odd–even oscillation + O(1/n) convergence rate
+│   └── ErrorBars.py              # MC estimator comparison across schemes (price ± 95% CI)
+├── tests/
+│   └── test_pricing.py       # Black–Scholes vs Hull, parity, Greeks, MC/CRR convergence
+└── .github/
+    └── workflows/
+        └── ci.yml            # ruff + pytest on Python 3.10–3.12
 ```
 
-The three plotting scripts all import from `OptionPricing.py`, so keep them next to it (or install
-the package — see the roadmap).
+The engine lives in `src/option_pricing/`. Scripts and tests import it as the installed
+`OptionPricing` package (see [Installation](#installation)), so they don't need to sit next to it.
 
 ---
 
@@ -59,15 +71,18 @@ the package — see the roadmap).
 git clone https://github.com/federicoticali/OptionPricingEngine.git
 cd OptionPricingEngine
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
-pip install -r numpy scipy matplotlib
+pip install -e ".[dev]"      # package (editable) + numpy/scipy/matplotlib + pytest/ruff
 ```
+
+`pip install -e .` (without `[dev]`) is enough just to use the library; add `[dev]` to also get the
+test and lint tools. Run the test suite with `pytest`.
 
 ---
 
 ## Quick start
 
 ```python
-from OptionPricing import (
+from option_pricing import (
     MarketData, VanillaOption,
     BlackScholesPricer, MonteCarloPricer, CoxRossRubensteinPricer,
 )
@@ -96,10 +111,12 @@ print(tree.CoxRossRubensteinTree())
 
 ## Reproducing the figures
 
+Run from the repo root (each script writes its PNG(s) to the current directory):
+
 ```bash
-python ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
-python CoxRossRubensteinTree.py    # -> crr_convergence.png
-python ErrorBars.py                # -> methods_comparison.png
+python scripts/ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
+python scripts/CoxRossRubensteinTree.py    # -> crr_convergence.png
+python scripts/ErrorBars.py                # -> methods_comparison.png
 ```
 
 - **`price_convergence.png`** — the three MC estimators (with ±1.96·SE bands) and the CRR tree all

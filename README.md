@@ -135,7 +135,7 @@ Good things to assert in a test suite:
 - BS price/Greeks vs the table above (and vs a finite-difference Greek for a sanity bound);
 - **put–call parity**: $C − P = S − Ke^{−rT}$ (internal consistency, no data needed);
 - MC estimate within its own 95% CI of the BS price for each scheme/estimator;
-- CRR price within an `$O(1/n)$` tolerance of BS;
+- CRR price within an $O(1/n)$ tolerance of BS;
 - cross-check against an independent library (e.g. **QuantLib**) on the same inputs.
 
 ---
@@ -144,7 +144,7 @@ Good things to assert in a test suite:
 
 - [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
       within CI, Greek finite-difference checks.
-- [ ] **Dividends.** Add a continuous dividend yield `q` (Merton extension): use the drift `(r − q)`
+- [ ] **Dividends.** Add a continuous dividend yield $q$ (Merton extension): use the drift $r − q$
       everywhere — BS becomes $Se^{−qT}N(d_1)−Ke^{−rT}N(d_2)%$, the MC terminal draw uses
       $\left(r − q − \frac{\sigma^2}{2}\right)$, and the CRR risk-neutral probability becomes $p = \frac{e^{(r−q)Δt} − d}{u − d}.
       Later step: discrete cash dividends (escrowed-spot or proportional approximation for the tree).

@@ -144,17 +144,16 @@ Good things to assert in a test suite:
 
 - [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
       within CI, Greek finite-difference checks.
-- [ ] **Bug:** `MonteCarloPricer.__post_init__` is never called — the class is *not* a dataclass and
-      defines its own `__init__`, so the `scheme` validation is dead code. A mistyped scheme (e.g.
-      `"eluer"`) silently falls into the Euler branch. Move the check into `__init__` / a setter.
-- [ ] Seed control for deterministic, reproducible Monte Carlo in tests.
-- [ ] Implied-volatility solver (invert Black–Scholes) — prerequisite for any real-market comparison.
+- [ ] **Dividends.** Add a continuous dividend yield `q` (Merton extension): use the drift `(r − q)`
+      everywhere — BS becomes `S·e^(−qT)·N(d₁) − K·e^(−rT)·N(d₂)`, the MC terminal draw uses
+      `(r − q − σ²/2)`, and the CRR risk-neutral probability becomes `p = (e^((r−q)Δt) − d)/(u − d)`.
+      Later step: discrete cash dividends (escrowed-spot or proportional approximation for the tree).
+- [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
+      a continuous dividend yield `q`.
 - [ ] Package the project (`pyproject.toml`, `src/` layout, `pip install -e .`) and make script /
       figure names consistent (some docstrings mention `crr_convergence.py` / `methods_comparison.png`
       that differ from the actual file names).
 - [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
-- [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
-      a continuous dividend yield `q`.
 - [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
       current usage, document or reset it if instances get reused.
 - [ ] Lint / format pass (`ruff`, `black`) and a docstring sweep.

@@ -201,9 +201,9 @@ class MonteCarloPricer:
         theta = mu / np.sqrt(self.n_steps)
         if self.scheme == 'exact':
             Z = np.random.standard_normal(self.n_paths)
-            Y = Z + self.mu
+            Y = Z + mu
             S_T = mkt.S * np.exp((mkt.r - 1 / 2 * mkt.sigma**2) * (opt.T - opt.t_in) + mkt.sigma * np.sqrt(opt.T - opt.t_in) * Y)
-            L = np.exp(- self.mu * Y + 1 / 2 * self.mu**2)
+            L = np.exp(- mu * Y + 1 / 2 * mu**2)
         else:
             dt = (opt.T - opt.t_in) / self.n_steps
             S = np.full(self.n_paths, float(mkt.S))

@@ -19,17 +19,19 @@ reference for testing (see Validation).
 # Features
 
 
-Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\mathscr{V}$, $\rho$) for calls and puts.
+Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\mathcal{V}$, $\rho$) for calls and puts.
+
+
 Monte Carlo pricer with:
-
-three path schemes: exact (exact GBM step), euler, milstein;
-four estimators: standard, antithetic variates, control variates (terminal stock
+- three path schemes: exact (exact GBM step), euler, milstein;
+- four estimators: standard, antithetic variates, control variates (terminal stock
 price as control), importance sampling;
-a 95% confidence interval (±1.96·SE) reported on every estimate.
-
+-a 95% confidence interval (±1.96·SE) reported on every estimate.
 
 
 Cox–Ross–Rubinstein binomial tree (vectorised over the terminal layer via the binomial pmf).
+
+
 Validation suite: three plotting scripts demonstrating convergence to the analytic price and
 the finite-difference Greek-error "U-curve".
 

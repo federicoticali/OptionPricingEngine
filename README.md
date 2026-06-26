@@ -1,75 +1,81 @@
 # European Option Pricing Engine
 
-A small, self-contained Python engine that prices European vanilla options in three independent
-ways — Black–Scholes closed-form, Monte Carlo (several variance-reduction techniques and
-discretisation schemes), and a Cox–Ross–Rubinstein binomial tree — plus a set of
+A small, self-contained Python engine that prices **European vanilla options** three independent
+ways — closed-form **Black–Scholes**, **Monte Carlo** (several variance-reduction techniques and
+discretisation schemes), and a **Cox–Ross–Rubinstein** binomial tree — plus a set of
 convergence/validation plots showing all three methods agreeing on the same price.
 
 The design is object-oriented and immutable at the data layer: market and contract parameters are
-frozen dataclasses (MarketData, VanillaOption), and each pricing method is its own class
+**frozen dataclasses** (`MarketData`, `VanillaOption`), and each pricing method is its own class
 sharing those same inputs.
 
+> The default example throughout the code (`S=49, K=50, r=5%, σ=20%, T=20/52`) is **John Hull's
+> textbook example** — the analytic call is ≈ **2.40**, which makes it a convenient published
+> reference for testing (see [Validation](#validation--reference-values)).
 
-The default example throughout the code (S=49, K=50, r=5%, σ=20%, T=20/52) is John Hull's
-textbook example (Chapter 18) — the analytic call is $\simeq2.40$, which makes it a convenient published
-reference for testing (see Validation).
+---
 
+## Features
 
+- **Analytic Black–Scholes** price + full Greeks (Δ, Γ, Θ, ν, ρ) for calls and puts.
+- **Monte Carlo** pricer with:
+  - three path schemes: `exact` (exact GBM step), `euler`, `milstein`;
+  - four estimators: **standard**, **antithetic variates**, **control variates** (terminal stock
+    price as control), **importance sampling**;
+  - a 95% confidence interval (±1.96·SE) reported on every estimate.
+- **Cox–Ross–Rubinstein** binomial tree (vectorised over the terminal layer via the binomial pmf).
+- **Validation suite**: three plotting scripts demonstrating convergence to the analytic price and
+  the finite-difference Greek-error "U-curve".
 
-# Features
+## Methods at a glance
 
+| Method        | Type          | Error behaviour                                | Good for                                   |
+|---------------|---------------|------------------------------------------------|--------------------------------------------|
+| Black–Scholes | closed form   | exact                                          | ground truth / fast Greeks                 |
+| Monte Carlo   | stochastic    | `O(1/√N)`, CI shrinks with variance reduction  | path-dependent generalisations, flexibility|
+| CRR tree      | deterministic | `O(1/n)`, with odd–even oscillation            | early-exercise generalisations, intuition  |
 
-Analytic Black–Scholes price + full Greeks ($\Delta$, $\Gamma$, $\Theta$, $\mathcal{V}$, $\rho$) for calls and puts.
+---
 
+## Project structure
 
-Monte Carlo pricer with:
-- three path schemes: exact (exact GBM step), euler, milstein;
-- four estimators: standard, antithetic variates, control variates (terminal stock price as control), importance sampling;
-- a 95% confidence interval (±1.96·SE) reported on every estimate.
-
-
-Cox–Ross–Rubinstein binomial tree (vectorised over the terminal layer via the binomial pmf).
-
-
-Validation suite: three plotting scripts demonstrating convergence to the analytic price and
-the finite-difference Greek-error "U-curve".
-
-
-Methods at a glance
-
-MethodTypeError behaviourGood forBlack–Scholesclosed formexactground truth / fast GreeksMonte CarlostochasticO(1/√N), CI shrinks with variance reductionpath-dependent generalisations, flexibilityCRR treedeterministicO(1/n), with odd–even oscillationearly-exercise generalisations, intuition
-
-
-Project structure
-
+```
 .
 ├── OptionPricing.py          # core engine: MarketData, VanillaOption, the three pricers
 ├── ConvergencePlot.py        # Fig 1: MC + tree converging to BS; Fig 2: Greek FD-error U-curve
 ├── CoxRossRubensteinTree.py  # CRR odd–even oscillation + O(1/n) convergence rate
 ├── ErrorBars.py              # MC estimator comparison across schemes (price ± 95% CI)
 └── README.md
+```
 
-The three plotting scripts all import from OptionPricing.py, so keep them next to it (or install
+The three plotting scripts all import from `OptionPricing.py`, so keep them next to it (or install
 the package — see the roadmap).
 
+---
 
-Installation
+## Installation
 
-bashgit clone https://github.com/<you>/<repo>.git
+```bash
+git clone https://github.com/<you>/<repo>.git
 cd <repo>
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-requirements.txt:
+`requirements.txt`:
 
+```
 numpy
 scipy
 matplotlib
+```
 
+---
 
-Quick start
+## Quick start
 
-pythonfrom OptionPricing import (
+```python
+from OptionPricing import (
     MarketData, VanillaOption,
     BlackScholesPricer, MonteCarloPricer, CoxRossRubensteinPricer,
 )
@@ -92,23 +98,88 @@ print(f"{price:.4f} ± {1.96 * se:.4f}")
 tree = CoxRossRubensteinPricer(market, option)
 tree.n_steps = 500
 print(tree.CoxRossRubensteinTree())
+```
 
+---
 
-Reproducing the figures
+## Reproducing the figures
 
-bashpython ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
+```bash
+python ConvergencePlot.py          # -> price_convergence.png, greeks_fd_error.png
 python CoxRossRubensteinTree.py    # -> crr_convergence.png
 python ErrorBars.py                # -> methods_comparison.png
+```
 
+- **`price_convergence.png`** — the three MC estimators (with ±1.96·SE bands) and the CRR tree all
+  converging to the analytic Black–Scholes line as the budget grows.
+- **`greeks_fd_error.png`** — the finite-difference error of Δ and Γ vs the bump size `h`: the
+  classic U-curve (truncation error `~h²` on the way down, floating-point round-off on the way up).
+- **`crr_convergence.png`** — left: the odd–even oscillation of the tree price around BS; right:
+  `|tree − BS|` decaying as `O(1/n)`, and how averaging consecutive trees `(n, n+1)` cancels the
+  oscillation.
+- **`methods_comparison.png`** — one panel per scheme (exact / euler / milstein); each estimator
+  shown as a point with its 95% CI. Shorter bar = better variance reduction.
 
-price_convergence.png — the three MC estimators (with ±1.96·SE bands) and the CRR tree all
-converging to the analytic Black–Scholes line as the budget grows.
-greeks_fd_error.png — the finite-difference error of Δ and Γ vs the bump size h: the
-classic U-curve (truncation error ~h² on the way down, floating-point round-off on the way up).
-crr_convergence.png — left: the odd–even oscillation of the tree price around BS; right:
-|tree − BS| decaying as O(1/n), and how averaging consecutive trees (n, n+1) cancels the
-oscillation.
-methods_comparison.png — one panel per scheme (exact / euler / milstein); each estimator
-shown as a point with its 95% CI. Shorter bar = better variance reduction.
+---
 
+## Validation & reference values
 
+For **European** options you don't need external market data to check correctness: the **analytic
+Black–Scholes price is the ground truth**, and both Monte Carlo and the CRR tree must converge to it
+(this is exactly what the plots show). The default parameters are Hull's example, so the engine can
+also be checked against the textbook's published numbers:
+
+| Quantity            | Value (Hull example) |
+|---------------------|----------------------|
+| Call price          | ≈ 2.40               |
+| Δ (delta)           | ≈ 0.522              |
+| Γ (gamma)           | ≈ 0.066              |
+| ν (vega, per 100%)  | ≈ 12.1               |
+| Θ (theta, per year) | ≈ −4.31              |
+| ρ (rho)             | ≈ 8.91               |
+
+Good things to assert in a test suite:
+
+- BS price/Greeks vs the table above (and vs a finite-difference Greek for a sanity bound);
+- **put–call parity**: `C − P = S − K·e^(−rT)` (internal consistency, no data needed);
+- MC estimate within its own 95% CI of the BS price for each scheme/estimator;
+- CRR price within an `O(1/n)` tolerance of BS;
+- cross-check against an independent library (e.g. **QuantLib**) on the same inputs.
+
+---
+
+## TODO / Roadmap
+
+- [ ] Add a `tests/` suite (`pytest`): Hull reference values, put–call parity, MC/CRR convergence
+      within CI, Greek finite-difference checks.
+- [ ] **Bug:** `MonteCarloPricer.__post_init__` is never called — the class is *not* a dataclass and
+      defines its own `__init__`, so the `scheme` validation is dead code. A mistyped scheme (e.g.
+      `"eluer"`) silently falls into the Euler branch. Move the check into `__init__` / a setter.
+- [ ] Seed control for deterministic, reproducible Monte Carlo in tests.
+- [ ] Implied-volatility solver (invert Black–Scholes) — prerequisite for any real-market comparison.
+- [ ] Package the project (`pyproject.toml`, `src/` layout, `pip install -e .`) and make script /
+      figure names consistent (some docstrings mention `crr_convergence.py` / `methods_comparison.png`
+      that differ from the actual file names).
+- [ ] Pin dependency versions and add CI (GitHub Actions) running the test suite.
+- [ ] Extend to **American** options (the CRR tree gives the natural backward-induction route) and to
+      a continuous dividend yield `q`.
+- [ ] Minor: `mu` in importance sampling is cached on the instance after first use — fine for the
+      current usage, document or reset it if instances get reused.
+- [ ] Lint / format pass (`ruff`, `black`) and a docstring sweep.
+
+---
+
+## References
+
+- J. C. Hull, *Options, Futures, and Other Derivatives* — source of the `S=49 / K=50 / r=5% /
+  σ=20% / T=20-week` example and its Greeks.
+- F. Black & M. Scholes (1973); R. C. Merton (1973).
+- J. C. Cox, S. A. Ross & M. Rubinstein (1979), *Option Pricing: A Simplified Approach*.
+- P. Glasserman, *Monte Carlo Methods in Financial Engineering* (variance-reduction techniques).
+
+---
+
+## License
+
+Released under the MIT License — see `LICENSE`. (Add a `LICENSE` file; MIT is a sensible default for
+a portfolio/quant project.)

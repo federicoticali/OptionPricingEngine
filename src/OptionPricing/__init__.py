@@ -1,10 +1,11 @@
-"""European option pricing engine.
+"""
+European option pricing engine.
  
 Public API:
     MarketData, VanillaOption        - immutable inputs (frozen dataclasses)
     BlackScholesPricer               - closed-form price + Greeks
     MonteCarloPricer                 - MC with variance reduction / schemes
-    CoxRossRubensteinPricer          - binomial tree
+    CoxRossRubinsteinPricer          - binomial tree
 """
  
 from .OptionPricing import (
@@ -12,7 +13,7 @@ from .OptionPricing import (
     VanillaOption,
     BlackScholesPricer,
     MonteCarloPricer,
-    CoxRossRubensteinPricer,
+    CoxRossRubinsteinPricer,
 )
  
 __all__ = [
@@ -20,7 +21,7 @@ __all__ = [
     "VanillaOption",
     "BlackScholesPricer",
     "MonteCarloPricer",
-    "CoxRossRubensteinPricer",
+    "CoxRossRubinsteinPricer",
 ]
  
 __version__ = "0.1.0"

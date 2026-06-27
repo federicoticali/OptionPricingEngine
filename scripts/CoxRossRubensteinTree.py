@@ -19,7 +19,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from OptionPricing import (
-    MarketData, VanillaOption, BlackScholesPricer, CoxRossRubensteinPricer,
+    MarketData, VanillaOption, BlackScholesPricer, CoxRossRubinsteinPricer,
 )
  
 Market = MarketData(S = 49, r = 0.05, sigma = 0.2)
@@ -28,9 +28,9 @@ BS = BlackScholesPricer(Market, Option).price()
  
  
 def tree_price(n: int) -> float:
-    t = CoxRossRubensteinPricer(Market, Option)
+    t = CoxRossRubinsteinPricer(Market, Option)
     t.n_steps = int(n)
-    return t.CoxRossRubensteinTree()
+    return t.CoxRossRubinsteinTree()
  
 
 steps_small = np.arange(2, 81)

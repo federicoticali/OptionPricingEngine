@@ -1,4 +1,5 @@
-"""Test suite for the European option pricing engine.
+"""
+Test suite for the European option pricing engine.
  
 Strategy: the analytic Black-Scholes price is the ground truth. Black-Scholes
 itself is checked against John Hull's published textbook example, the Greeks
@@ -16,31 +17,32 @@ from OptionPricing import (
     VanillaOption,
     BlackScholesPricer,
     MonteCarloPricer,
-    CoxRossRubensteinPricer,
+    CoxRossRubinsteinPricer,
 )
  
 SEED = 12345
  
-# Hull, "Options, Futures, and Other Derivatives": S=49, K=50, r=5%, sigma=20%,
+# Hull, "Options, Futures, and Other Derivatives": S = 49, K = 50, r = 5%, sigma = 20%,
 # T=20 weeks. The textbook rounds the call to 2.40; the precise analytic value
 # (pinned here as a regression guard) is 2.4005. Greeks: delta ~ 0.522,
 # gamma ~ 0.066, vega ~ 12.1, theta ~ -4.31, rho ~ 8.91.
+
 HULL_CALL_PRICE = 2.4005
  
  
 @pytest.fixture
 def market():
-    return MarketData(S=49, r=0.05, sigma=0.20)
+    return MarketData(S = 49, r = 0.05, sigma = 0.20)
  
  
 @pytest.fixture
 def call_opt():
-    return VanillaOption(K=50, T=20 / 52, option_type="call")
+    return VanillaOption(K = 50, T = 20 / 52, option_type = "call")
  
  
 @pytest.fixture
 def put_opt():
-    return VanillaOption(K=50, T=20 / 52, option_type="put")
+    return VanillaOption(K = 50, T = 20 / 52, option_type = "put")
  
  
 # ----------------------------- Black-Scholes ------------------------------- #
@@ -68,15 +70,15 @@ def test_call_intrinsic_bounds(market, call_opt):
 # ------------------------ Greeks via finite differences -------------------- #
  
 def _bump_spot(market, ds):
-    return MarketData(S=market.S + ds, r=market.r, sigma=market.sigma)
+    return MarketData(S = market.S + ds, r = market.r, sigma = market.sigma)
  
  
 def _bump_sigma(market, dv):
-    return MarketData(S=market.S, r=market.r, sigma=market.sigma + dv)
+    return MarketData(S = market.S, r = market.r, sigma = market.sigma + dv)
  
  
 def _bump_rate(market, dr):
-    return MarketData(S=market.S, r=market.r + dr, sigma=market.sigma)
+    return MarketData(S = market.S, r = market.r + dr, sigma = market.sigma)
  
  
 def test_delta_matches_central_difference(market, call_opt):
@@ -174,26 +176,26 @@ def test_mc_put_within_confidence_interval(market, put_opt):
  
 def test_crr_converges_to_bs_call(market, call_opt):
     bs = BlackScholesPricer(market, call_opt).price()
-    tree = CoxRossRubensteinPricer(market, call_opt)
+    tree = CoxRossRubinsteinPricer(market, call_opt)
     tree.n_steps = 2000
-    assert tree.CoxRossRubensteinTree() == pytest.approx(bs, abs=5e-3)
+    assert tree.CoxRossRubinsteinTree() == pytest.approx(bs, abs=5e-3)
  
  
 def test_crr_converges_to_bs_put(market, put_opt):
     bs = BlackScholesPricer(market, put_opt).price()
-    tree = CoxRossRubensteinPricer(market, put_opt)
+    tree = CoxRossRubinsteinPricer(market, put_opt)
     tree.n_steps = 2000
-    assert tree.CoxRossRubensteinTree() == pytest.approx(bs, abs=5e-3)
+    assert tree.CoxRossRubinsteinTree() == pytest.approx(bs, abs=5e-3)
  
  
 def test_crr_error_decreases_with_steps(market, call_opt):
     bs = BlackScholesPricer(market, call_opt).price()
-    coarse = CoxRossRubensteinPricer(market, call_opt)
+    coarse = CoxRossRubinsteinPricer(market, call_opt)
     coarse.n_steps = 10
-    fine = CoxRossRubensteinPricer(market, call_opt)
+    fine = CoxRossRubinsteinPricer(market, call_opt)
     fine.n_steps = 1000
-    err_coarse = abs(coarse.CoxRossRubensteinTree() - bs)
-    err_fine = abs(fine.CoxRossRubensteinTree() - bs)
+    err_coarse = abs(coarse.CoxRossRubinsteinTree() - bs)
+    err_fine = abs(fine.CoxRossRubinsteinTree() - bs)
     assert err_fine < err_coarse
  
  

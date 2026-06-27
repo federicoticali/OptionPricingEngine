@@ -2,7 +2,7 @@
 Convergence & validation plots for the European Option Pricing Engine.
  
 Class-based: built on the OOP API in OptionPricing.py
-  (MarketData, VanillaOption, BlackScholesPricer, MonteCarloPricer, CoxRossRubensteinPricer).
+  (MarketData, VanillaOption, BlackScholesPricer, MonteCarloPricer, CoxRossRubinsteinPricer).
  
 Produces two figures:
   1) price_convergence.png - the Monte Carlo estimators (standard, antithetic,
@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
  
 from OptionPricing import (
     MarketData, VanillaOption, BlackScholesPricer,
-    MonteCarloPricer, CoxRossRubensteinPricer,
+    MonteCarloPricer, CoxRossRubinsteinPricer,
 )
 
 Market = MarketData(S = 49, r = 0.05, sigma = 0.2)
@@ -41,9 +41,9 @@ def mc_estimate(n_paths, variance_reduction):
  
  
 def tree_estimate(n_steps):
-    tree = CoxRossRubensteinPricer(Market, Option)
+    tree = CoxRossRubinsteinPricer(Market, Option)
     tree.n_steps = n_steps
-    return tree.CoxRossRubensteinTree()
+    return tree.CoxRossRubinsteinTree()
  
  
 def bs_price_at(spot):

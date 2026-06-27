@@ -3,8 +3,12 @@ import numpy as np
 from dataclasses import dataclass
 import warnings
 
-@dataclass(frozen = True)
-class MarketData:
+# Using classes because in the majority of the functions the same 5 or 6
+# arguments are asked. Defining classes that incorporate all of these
+# parameters allows to make the code more readable.
+
+@dataclass(frozen = True)           # I assume that Market parameters are constant in time
+class MarketData:                 
     S: float
     r: float
     sigma: float
@@ -13,7 +17,7 @@ class MarketData:
         if self.S <= 0 or self.sigma <= 0:
             raise ValueError("S and sigma must be greater than 0!")
 
-@dataclass(frozen = True)
+@dataclass(frozen = True)           # I assume that Option parameters are constant in time
 class VanillaOption:
     K: float
     T: float
@@ -28,7 +32,10 @@ class VanillaOption:
         if self.t_in > self.T:
             raise ValueError("Initial time cannot be larger than maturity time!")
 
-class BlackScholesPricer:
+# Assuming riskless market and no-arbitrage argument. Using analytic formulas taken from
+# J. Hull "Options, Futures and Other Derivatives" textbook.
+
+class BlackScholesPricer:           
     def __init__(self, market: MarketData, option: VanillaOption):
         self.option = option
         self.market = market
@@ -44,7 +51,7 @@ class BlackScholesPricer:
         self.N1minus = norm.cdf(- self.d1)
         self.N2minus = norm.cdf(- self.d2)
 
-    def price(self) -> float:
+    def price(self) -> float:       
         opt, mkt = self.option, self.market
         if opt.option_type == 'call':
             return mkt.S * self.N1 - opt.K * np.exp(- mkt.r * (opt.T - opt.t_in)) * self.N2
@@ -88,6 +95,11 @@ class BlackScholesPricer:
             "rho": self.rho()
         }
     
+# Implemented Monte Carlo with 3 possible variance reduction techniques.
+# The performance of this code can be improved using parallel computing,
+# libraries that take advantage of Just In Time compilation (like numba)
+# or the usage of Cython.
+
 class MonteCarloPricer:
     scheme: str = 'exact'
     n_paths: int = 200000
@@ -236,7 +248,11 @@ class MonteCarloPricer:
             warnings.warn("No valid variance reduction technique requested, StandardMC will be executed.")
             return self.StandardMC()
 
-class CoxRossRubensteinPricer:
+# Assuming that the price of a stock changes with discrete
+# time steps. Using formulas proposed by Cox, Ross and
+# Rubinstein in 1979 for u and d.
+
+class CoxRossRubinsteinPricer:
     n_steps: int = 1000
 
     def __init__(self, market: MarketData, option: VanillaOption):
@@ -249,7 +265,7 @@ class CoxRossRubensteinPricer:
             return np.maximum(S - opt.K, 0)
         return np.maximum(opt.K - S, 0)
 
-    def CoxRossRubensteinTree(self):
+    def CoxRossRubinsteinTree(self):
         opt, mkt = self.option, self.market
         dt = (opt.T - opt.t_in) / self.n_steps
         u = np.exp(mkt.sigma * np.sqrt(dt))

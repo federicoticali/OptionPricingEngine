@@ -72,6 +72,7 @@ git clone https://github.com/federicoticali/OptionPricingEngine.git
 cd OptionPricingEngine
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"      # package (editable) + numpy/scipy/matplotlib + pytest/ruff
+pip install requirements
 ```
 
 `pip install -e .` (without `[dev]`) is enough just to use the library; add `[dev]` to also get the

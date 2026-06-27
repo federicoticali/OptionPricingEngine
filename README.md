@@ -129,6 +129,15 @@ python scripts/ErrorBars.py                # -> methods_comparison.png
 - **`methods_comparison.png`** — one panel per scheme (exact / euler / milstein); each estimator
   shown as a point with its 95% CI. Shorter bar = better variance reduction.
 
+
+![Price Convergence](img/price_convergence.png)
+
+![Greeks Errors](img/greeks_fd_error.png)
+
+![Cox-Ross-Rubenstein Tree Convergence](img/crr_convergence.png)
+
+![Methods Errorbar Comparison](img/methods_comparison.png)
+
 ---
 
 ## Validation & reference values
